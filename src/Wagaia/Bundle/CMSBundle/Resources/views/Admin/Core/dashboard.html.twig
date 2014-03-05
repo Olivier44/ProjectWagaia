@@ -1,0 +1,30 @@
+{% extends base_template %}
+
+{% block title %}{{ 'title_dashboard'|trans({}, 'SonataAdminBundle') }}{% endblock%}
+{% block breadcrumb %}{% endblock %}
+{% block content %}
+
+    {{ sonata_block_render_event('sonata.admin.dashboard.top', { 'admin_pool': admin_pool }) }}
+
+
+    {% set has_center = false %}
+    {% for block in blocks %}
+        {% if block.position == 'center' %}
+            {% set has_center = true %}
+        {% endif %}
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>Bienvenue dans l'espace d'administration de votre site.</h1>
+                <p class="lead">Cet espace est dédié à vous aider à gérer le contenu de votre site Web.</p>
+
+            {#{% for block in blocks %}
+                 {{ sonata_block_render({ 'type': block.type, 'settings': block.settings}) }}
+            {% endfor %}#}
+        </div>
+    </div>
+
+    {{ sonata_block_render_event('sonata.admin.dashboard.bottom', { 'admin_pool': admin_pool }) }}
+
+{% endblock %}

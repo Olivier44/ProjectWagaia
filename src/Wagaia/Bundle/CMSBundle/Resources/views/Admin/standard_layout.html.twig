@@ -1,0 +1,600 @@
+{% set _preview = block('preview') %}
+{% set _form = block('form') %}
+{% set _show = block('show') %}
+{% set _list_table = block('list_table') %}
+{% set _list_filters = block('list_filters') %}
+{% set _side_menu = block('side_menu') %}
+{% set _content = block('content') %}
+{% set _title = block('title') %}
+{% set _breadcrumb = block('breadcrumb') %}
+{% set _actions = block('actions') %}
+
+<!DOCTYPE html>
+<html {% block html_attributes %}class="no-js"{% endblock %}>
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% block stylesheets %}
+
+        <link href="{{ asset('bundles/wagaiacms/admin/css/bootstrap.min.css') }}" rel="stylesheet" />
+        <link rel="stylesheet" href="{{ asset('bundles/wagaiacms/admin/css/font-awesome.min.css') }}" />
+
+        <!--[if IE 7]>
+            <link rel="stylesheet" href="{{ asset('bundles/wagaiacms/admin/css/font-awesome-ie7.min.css') }}" />
+        <![endif]-->
+
+        <!-- page specific plugin styles -->
+
+        <!-- fonts -->
+
+        <link rel="stylesheet" href="{{ asset('bundles/wagaiacms/admin/css/ace-fonts.css') }}" />
+
+        <!-- ace styles -->
+
+        <link rel="stylesheet" href="{{ asset('bundles/wagaiacms/admin/css/ace.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('bundles/wagaiacms/admin/css/ace-rtl.min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('bundles/wagaiacms/admin/css/ace-skins.min.css') }}" />
+
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="{{ asset('bundles/wagaiacms/admin/css/ace-ie.min.css') }}" />
+        <![endif]-->
+
+        <!-- ace settings handler -->
+
+        <script src="{{ asset('bundles/wagaiacms/admin/js/ace-extra.min.js') }}"></script>
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+        <!--[if lt IE 9]>
+            <script src="{{ asset('bundles/wagaiacms/admin/js/html5shiv.js') }}"></script>
+            <script src="{{ asset('bundles/wagaiacms/admin/js/respond.min.js') }}"></script>
+        <![endif]-->
+
+        <!-- jQuery code -->
+        {#<link rel="stylesheet" href="{{ asset('bundles/sonatajquery/themes/flick/jquery-ui-1.8.16.custom.css') }}" media="all">
+
+        <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/bootstrap/css/bootstrap.min.css') }}" media="all">
+        <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/bootstrap/css/bootstrap-responsive.min.css') }}" media="all">
+
+        <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/x-editable/css/bootstrap-editable.css') }}" media="all">#}
+
+        {% if admin_pool is defined and admin_pool.getOption('use_select2') %}
+            <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/select2/select2.css') }}" media="all">
+            <style>
+                div.select2-container {
+                    margin-left: 0px !important;
+                }
+
+                div.select2-drop ul {
+                    margin: 0px !important;
+                }
+            </style>
+        {% endif %}
+
+        <!-- base application asset -->
+        {#<link rel="stylesheet" href="{{ asset('bundles/sonataadmin/css/layout.css') }}" media="all">
+        <link rel="stylesheet" href="{{ asset('bundles/sonataadmin/css/colors.css') }}" media="all">#}
+
+    {% endblock %}
+
+    {% block javascripts %}
+        <script>
+            window.SONATA_CONFIG = {
+                CONFIRM_EXIT: {% if admin_pool is defined and admin_pool.getOption('confirm_exit') %}true{% else %}false{% endif %},
+                USE_SELECT2: {% if admin_pool is defined and admin_pool.getOption('use_select2') %}true{% else %}false{% endif %}
+            };
+            window.SONATA_TRANSLATIONS = {
+                CONFIRM_EXIT: '{{ 'confirm_exit'|trans({}, 'SonataAdminBundle')|escape('js') }}'
+            };
+        </script>
+
+        {#<script src="{{ asset('bundles/sonatajquery/jquery-1.8.3.js') }}"></script>
+        <script src="{{ asset('bundles/sonatajquery/jquery-ui-1.8.23.js') }}"></script>
+        <script src="{{ asset('bundles/sonatajquery/jquery-ui-i18n.js') }}"></script>
+
+        <script src="{{ asset('bundles/sonataadmin/bootstrap/js/bootstrap.min.js') }}"></script>
+
+        <script src="{{ asset('bundles/sonataadmin/x-editable/js/bootstrap-editable.min.js') }}"></script>#}
+
+        {% if admin_pool is defined and admin_pool.getOption('use_select2') %}
+        <script src="{{ asset('bundles/sonataadmin/select2/select2.min.js') }}"></script>
+        {% endif %}
+
+        <script src="{{ asset('bundles/sonataadmin/jquery/jquery.form.js') }}"></script>
+        {% if admin_pool is defined and admin_pool.getOption('confirm_exit') %}<script src="{{ asset('bundles/sonataadmin/jquery/jquery.confirmExit.js') }}"></script>{% endif %}
+        <script src="{{ asset('bundles/sonataadmin/base.js') }}"></script>
+    {% endblock %}
+
+    <title>
+        {{ 'Admin'|trans({}, 'SonataAdminBundle') }}
+
+        {% if _title is not empty %}
+            {{ _title|raw }}
+        {% else %}
+            {% if action is defined %}
+                -
+                {% for menu in admin.breadcrumbs(action) %}
+                    {% if not loop.first %}
+                        &gt;
+                    {% endif %}
+                    {{ menu.label }}
+                {% endfor %}
+            {% endif %}
+        {% endif%}
+    </title>
+</head>
+<body {% block body_attributes %}class="sonata-bc {% if _side_menu is empty %}sonata-ba-no-side-menu{% endif %}"{% endblock %}>
+{# initialize block value #}
+
+{% block sonata_nav %}
+    <div class="navbar navbar-default" id="navbar">
+        <script type="text/javascript">
+            try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+        </script>
+
+        <div class="navbar-container" id="navbar-container">
+            <div class="navbar-header pull-left">
+                    {% if admin_pool is defined %}
+                        <div class="navbar-header pull-right" role="navigation">{% include admin_pool.getTemplate('user_block') %}</div>
+
+                        {% block logo %}
+                            <a href="{{ url('sonata_admin_dashboard') }}" class="navbar-brand">
+                                <img src="{{ asset(admin_pool.titlelogo) }}" alt="{{ admin_pool.title }}">
+                                {{ admin_pool.title }}
+                            </a>
+                        {% endblock %}
+
+                        {% block sonata_nav_menu_before %}{% endblock %}
+
+                        {% block sonata_nav_menu %}
+                            <div class="nav-collapse">
+                                <ul class="nav">
+                                    {% block top_bar_before_nav %} {% endblock %}
+                                    {% block sonata_top_bar_nav %}
+                                        {% if app.security.token and is_granted('ROLE_SONATA_ADMIN') %}
+                                            {% for group in admin_pool.dashboardgroups %}
+                                                {% set display = (group.roles is empty or is_granted('ROLE_SUPER_ADMIN') ) %}
+                                                {% for role in group.roles if not display %}
+                                                    {% set display = is_granted(role) %}
+                                                {% endfor %}
+
+                                                {# Do not display the group label if no item in group is available #}
+                                                {% set item_count = 0 %}
+                                                {% if display %}
+                                                    {% for admin in group.items if item_count == 0 %}
+                                                        {% if admin.hasroute('list') and admin.isGranted('LIST') %}
+                                                            {% set item_count = item_count+1 %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                {% if display and (item_count > 0) %}
+                                                    <li class="dropdown">
+                                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ group.label|trans({}, group.label_catalogue) }} <span class="caret"></span></a>
+                                                        <ul class="dropdown-menu">
+                                                            {% for admin in group.items %}
+                                                                {% if admin.hasroute('list') and admin.isGranted('LIST') %}
+                                                                    <li{% if app.request.get('_sonata_admin') == admin.code %} class="active"{% endif %}><a href="{{ admin.generateUrl('list')}}">{{ admin.label|trans({}, admin.translationdomain) }}</a></li>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endblock %}
+                                    {% block top_bar_after_nav %} {% endblock %}
+                                </ul>
+
+                                {% block sonata_top_bar_search %}
+                                    {% if app.security.token and is_granted('ROLE_SONATA_ADMIN') %}
+                                        <form action="{{ url('sonata_admin_search') }}" method="GET" class="navbar-search">
+                                            <div class="input-append">
+                                                <input type="text" name="q" value="{{ app.request.get('q') }}" class="input-large search-query" placeholder="{{ 'search_placeholder'|trans({}, 'SonataAdminBundle') }}">
+                                            </div>
+                                        </form>
+                                    {% endif %}
+                                {% endblock %}
+
+                            </div>
+                        {% endblock %}
+
+                        {% block sonata_nav_menu_after %}{% endblock %}
+
+                    {% endif %}
+            </div><!-- /.navbar-header -->
+        </div>
+    </div>
+{% endblock sonata_nav %}
+
+<div class="main-container" id="main-container">
+    <script type="text/javascript">
+        try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+    </script>
+
+    <div class="main-container-inner">
+        <a class="menu-toggler" id="menu-toggler" href="#">
+            <span class="menu-text"></span>
+        </a>
+
+        <div id="sidebar" class="sidebar">
+        <script type="text/javascript">
+            try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+        </script>
+
+
+        <ul class="nav nav-list">
+        <li>
+            <a href="index.html">
+                <i class="icon-dashboard"></i>
+                <span class="menu-text"> Tableau de bord </span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-file-alt"></i>
+                <span class="menu-text"> Gestion des pages </span>
+
+                <b class="arrow icon-angle-down"></b>
+            </a>
+
+            <ul class="submenu">
+                <li>
+                    <a href="#"><i class="icon-double-angle-right"></i>Liste des pages</a>
+                </li>
+                <li>
+                    <a href="#"><i class="icon-double-angle-right"></i>Ajouter une page</a>
+                </li>
+            </ul>
+        </li>
+        </ul><!-- /.nav-list -->
+
+        <div id="sidebar-collapse" class="sidebar-collapse">
+            <i data-icon2="icon-double-angle-right" data-icon1="icon-double-angle-left" class="icon-double-angle-left"></i>
+        </div>
+
+        <script type="text/javascript">
+            try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+        </script>
+        </div>
+
+    {% block sonata_page_content %}
+
+        <div class="main-content">
+            {% block sonata_breadcrumb %}
+                {% if _breadcrumb is not empty or action is defined %}
+                    <div class="breadcrumbs" id="breadcrumbs">
+                        <ul class="breadcrumb">
+                            {% if _breadcrumb is empty %}
+                                {% if action is defined %}
+                                    <li>
+                                        <i class="icon-home home-icon"></i>
+                                        <a href="#">Accueil</a>
+                                    </li>
+                                    {% for menu in admin.breadcrumbs(action) %}
+                                        {% if not loop.last %}
+                                            <li>
+                                                {% if menu.uri is not empty %}
+                                                    <a href="{{ menu.uri }}">{{ menu.label }}</a>
+                                                {% else %}
+                                                    {{ menu.label }}
+                                                {% endif %}
+                                            </li>
+                                        {% else %}
+                                            <li class="active">{{ menu.label }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% else %}
+                                {{ _breadcrumb|raw }}
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endblock sonata_breadcrumb %}
+
+            {% block notice %}
+                {% include 'SonataCoreBundle:FlashMessage:render.html.twig' %}
+            {% endblock %}
+
+            {#{% if _actions is not empty %}
+                <div class="span4 offset2">
+                    {{ _actions|raw }}
+                </div>
+            {% endif %}#}
+
+        <div class="page-content">
+
+            <div class="page-header">
+                <h1>
+                    {% if _title is not empty %}
+                        {{ _title|raw }}
+                    {% endif%}
+                 </h1>
+            </div>
+
+            {% if _side_menu is not empty %}
+                <div class="sidebar span2">
+                    <div class="well sonata-ba-side-menu" style="padding: 8px 0;">{{ _side_menu|raw }}</div>
+                </div>
+            {% endif %}
+
+                {% block sonata_admin_content %}
+
+                    {% if _preview is not empty %}
+                        <div class="sonata-ba-preview">{{ _preview|raw }}</div>
+                    {% endif %}
+
+                    {% if _content is not empty %}
+                        {{ _content|raw }}
+                    {% endif %}
+
+                    {% if _show is not empty %}
+                        <div class="sonata-ba-show">{{ _show|raw }}</div>
+                    {% endif %}
+
+                    {% if _form is not empty %}
+                        <div class="sonata-ba-form">{{ _form|raw }}</div>
+                    {% endif %}
+
+                    {% if _list_table is not empty or _list_filters is not empty %}
+                        <div class="row-fluid">
+                            <div class="sonata-ba-list {% if _list_filters|trim %}span10{% else %}span12{% endif %}">
+                                {{ _list_table|raw }}
+                            </div>
+                            {% if _list_filters|trim %}
+                                <div class="sonata-ba-filter span2">
+                                    {{ _list_filters|raw }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                {% endblock %}
+
+            </div>
+            </div>
+        </div>
+
+        <a class="btn-scroll-up btn btn-sm btn-inverse" id="btn-scroll-up" href="#">
+            <i class="icon-double-angle-up icon-only bigger-110"></i>
+        </a>
+
+    {% endblock %}
+</div>
+
+    <!--[if !IE]> -->
+        <script src="{{ asset('bundles/wagaiacms/admin/js/jquery-2.0.3.min.js') }}"></script>
+    <!-- <![endif]-->
+
+    <!--[if IE]>
+        <script type="text/javascript" src="{{ asset('bundles/wagaiacms/admin/js/jquery-1.10.2.min.js') }}"></script>
+    <![endif]-->
+
+    <script type="text/javascript">
+        if("ontouchend" in document) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+    </script>
+    <script src="{{ asset('bundles/wagaiacms/admin/js/bootstrap.min.js') }}></script>
+    <script src="{{ asset('bundles/wagaiacms/admin/js/typeahead-bs2.min.js') }}></script>
+
+    <!-- page specific plugin scripts -->
+
+    <!--[if lte IE 8]>
+    <script src="{{ asset('bundles/wagaiacms/admin/js/excanvas.min.js') }}></script>
+    <![endif]-->
+
+    <script src="{{ asset('bundles/wagaiacms/admin/js/jquery-ui-1.10.3.custom.min.js') }}"></script>
+    <script src="{{ asset('bundles/wagaiacms/admin/js/query.ui.touch-punch.min.js') }}"></script>
+    <script src="{{ asset('bundles/wagaiacms/admin/js/jquery.slimscroll.min.js') }}"></script>
+    <script src="{{ asset('bundles/wagaiacms/admin/js/jquery.easy-pie-chart.min.js') }}"></script>
+    <script src="{{ asset('bundles/wagaiacms/admin/js/jquery.sparkline.min.js') }}"></script>
+    <script src="{{ asset('bundles/wagaiacms/admin/js/flot/jquery.flot.min.js') }}"></script>
+    <script src="{{ asset('bundles/wagaiacms/admin/js/flot/jquery.flot.pie.min.js') }}"></script>
+    <script src="{{ asset('bundles/wagaiacms/admin/js/flot/jquery.flot.resize.min.js') }}"></script>
+
+    <!-- ace scripts -->
+
+    <script src="{{ asset('bundles/wagaiacms/admin/js/ace-elements.min.js') }}"></script>
+    <script src="{{ asset('bundles/wagaiacms/admin/js/ace.min.js') }}"></script>
+
+    <!-- inline scripts related to this page -->
+
+    <script type="text/javascript">
+        jQuery(function($) {
+            $('.easy-pie-chart.percentage').each(function(){
+                var $box = $(this).closest('.infobox');
+                var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
+                var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
+                var size = parseInt($(this).data('size')) || 50;
+                $(this).easyPieChart({
+                    barColor: barColor,
+                    trackColor: trackColor,
+                    scaleColor: false,
+                    lineCap: 'butt',
+                    lineWidth: parseInt(size/10),
+                    animate: /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ? false : 1000,
+                    size: size
+                });
+            })
+
+            $('.sparkline').each(function(){
+                var $box = $(this).closest('.infobox');
+                var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
+                $(this).sparkline('html', {tagValuesAttribute:'data-values', type: 'bar', barColor: barColor , chartRangeMin:$(this).data('min') || 0} );
+            });
+
+
+
+
+           /* var placeholder = $('#piechart-placeholder').css({'width':'90%' , 'min-height':'150px'});
+            var data = [
+                { label: "social networks",  data: 38.7, color: "#68BC31"},
+                { label: "search engines",  data: 24.5, color: "#2091CF"},
+                { label: "ad campaigns",  data: 8.2, color: "#AF4E96"},
+                { label: "direct traffic",  data: 18.6, color: "#DA5430"},
+                { label: "other",  data: 10, color: "#FEE074"}
+            ]
+            function drawPieChart(placeholder, data, position) {
+                $.plot(placeholder, data, {
+                    series: {
+                        pie: {
+                            show: true,
+                            tilt:0.8,
+                            highlight: {
+                                opacity: 0.25
+                            },
+                            stroke: {
+                                color: '#fff',
+                                width: 2
+                            },
+                            startAngle: 2
+                        }
+                    },
+                    legend: {
+                        show: true,
+                        position: position || "ne",
+                        labelBoxBorderColor: null,
+                        margin:[-30,15]
+                    }
+                    ,
+                    grid: {
+                        hoverable: true,
+                        clickable: true
+                    }
+                })
+            }
+            drawPieChart(placeholder, data);*/
+
+            /**
+             we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
+             so that's not needed actually.
+             */
+            placeholder.data('chart', data);
+            placeholder.data('draw', drawPieChart);
+
+
+
+            var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+            var previousPoint = null;
+
+            placeholder.on('plothover', function (event, pos, item) {
+                if(item) {
+                    if (previousPoint != item.seriesIndex) {
+                        previousPoint = item.seriesIndex;
+                        var tip = item.series['label'] + " : " + item.series['percent']+'%';
+                        $tooltip.show().children(0).text(tip);
+                    }
+                    $tooltip.css({top:pos.pageY + 10, left:pos.pageX + 10});
+                } else {
+                    $tooltip.hide();
+                    previousPoint = null;
+                }
+
+            });
+
+
+
+
+
+
+            var d1 = [];
+            for (var i = 0; i < Math.PI * 2; i += 0.5) {
+                d1.push([i, Math.sin(i)]);
+            }
+
+            var d2 = [];
+            for (var i = 0; i < Math.PI * 2; i += 0.5) {
+                d2.push([i, Math.cos(i)]);
+            }
+
+            var d3 = [];
+            for (var i = 0; i < Math.PI * 2; i += 0.2) {
+                d3.push([i, Math.tan(i)]);
+            }
+
+
+            /*var sales_charts = $('#sales-charts').css({'width':'100%' , 'height':'220px'});
+            $.plot("#sales-charts", [
+                { label: "Domains", data: d1 },
+                { label: "Hosting", data: d2 },
+                { label: "Services", data: d3 }
+            ], {
+                hoverable: true,
+                shadowSize: 0,
+                series: {
+                    lines: { show: true },
+                    points: { show: true }
+                },
+                xaxis: {
+                    tickLength: 0
+                },
+                yaxis: {
+                    ticks: 10,
+                    min: -2,
+                    max: 2,
+                    tickDecimals: 3
+                },
+                grid: {
+                    backgroundColor: { colors: [ "#fff", "#fff" ] },
+                    borderWidth: 1,
+                    borderColor:'#555'
+                }
+            });*/
+
+
+            $('#recent-box [data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+            function tooltip_placement(context, source) {
+                var $source = $(source);
+                var $parent = $source.closest('.tab-content')
+                var off1 = $parent.offset();
+                var w1 = $parent.width();
+
+                var off2 = $source.offset();
+                var w2 = $source.width();
+
+                if( parseInt(off2.left) < parseInt(off1.left) + parseInt(w1 / 2) ) return 'right';
+                return 'left';
+            }
+
+
+            $('.dialogs,.comments').slimScroll({
+                height: '300px'
+            });
+
+
+            //Android's default browser somehow is confused when tapping on label which will lead to dragging the task
+            //so disable dragging when clicking on label
+            var agent = navigator.userAgent.toLowerCase();
+            if("ontouchstart" in document && /applewebkit/.test(agent) && /android/.test(agent))
+                $('#tasks').on('touchstart', function(e){
+                    var li = $(e.target).closest('#tasks li');
+                    if(li.length == 0)return;
+                    var label = li.find('label.inline').get(0);
+                    if(label == e.target || $.contains(label, e.target)) e.stopImmediatePropagation() ;
+                });
+
+            $('#tasks').sortable({
+                        opacity:0.8,
+                        revert:true,
+                        forceHelperSize:true,
+                        placeholder: 'draggable-placeholder',
+                        forcePlaceholderSize:true,
+                        tolerance:'pointer',
+                        stop: function( event, ui ) {//just for Chrome!!!! so that dropdowns on items don't appear below other items after being moved
+                            $(ui.item).css('z-index', 'auto');
+                        }
+                    }
+            );
+            $('#tasks').disableSelection();
+            $('#tasks input:checkbox').removeAttr('checked').on('click', function(){
+                if(this.checked) $(this).closest('li').addClass('selected');
+                else $(this).closest('li').removeClass('selected');
+            });
+
+
+        })
+    </script>
+</body>
+</html>
