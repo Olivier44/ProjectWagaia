@@ -90,6 +90,7 @@
             };
         </script>
 
+        <script src="{{ asset('bundles/wagaiacms/admin/ckeditor/ckeditor.js') }}"></script>
         {#<script src="{{ asset('bundles/sonatajquery/jquery-1.8.3.js') }}"></script>
         <script src="{{ asset('bundles/sonatajquery/jquery-ui-1.8.23.js') }}"></script>
         <script src="{{ asset('bundles/sonatajquery/jquery-ui-i18n.js') }}"></script>
@@ -403,6 +404,11 @@
 
     <script type="text/javascript">
         jQuery(function($) {
+
+            // Ckeditor
+            CKEDITOR.replace('ckeditor');
+
+
             $('.easy-pie-chart.percentage').each(function(){
                 var $box = $(this).closest('.infobox');
                 var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');

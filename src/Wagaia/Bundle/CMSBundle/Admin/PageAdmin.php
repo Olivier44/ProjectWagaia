@@ -18,7 +18,6 @@ class PageAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
             ->add('title', null, array('label' => 'Titre'))
             ->add('isPublish', null, array('label' => 'Publication'))
             ->add('slug')
@@ -39,7 +38,7 @@ class PageAdmin extends Admin
     {
         $formMapper
             ->add('title')
-            ->add('content', null, array('required' => false, 'attr' => array('class' => 'wysiwyg-toolbar btn-toolbar center  wysiwyg-style2')))
+            ->add('content', null, array('required' => false, 'attr' => array('class' => 'ckeditor')))
             ->add('isPublish', 'checkbox')
         ;
     }
