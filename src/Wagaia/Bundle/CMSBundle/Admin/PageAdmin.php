@@ -10,7 +10,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class PageAdmin extends Admin
 {
-    protected $baseRouteName = 'page';
+    protected $baseRoutePattern = 'page';
 
     /**
      * @param ListMapper $listMapper
