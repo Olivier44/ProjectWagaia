@@ -22,4 +22,19 @@ class DefaultController extends Controller
 
         return $this->render('WagaiaCMSBundle:Default:index.html.twig', array('page' => $homepage));
     }
+
+    public function pageAction($slug)
+    {
+        $page = $this->getDoctrine()
+            ->getRepository('WagaiaCMSBundle:Page')
+            ->findOneBySlug($slug);
+
+        if (!$page) {
+            throw $this->createNotFoundException(
+                'Page non trouvée.'
+            );
+        }
+
+        return $this->render('WagaiaCMSBundle:Default:index.html.twig', array('page' => $page));
+    }
 }
