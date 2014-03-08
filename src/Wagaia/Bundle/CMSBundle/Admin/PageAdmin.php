@@ -8,9 +8,14 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
+use Knp\Menu\FactoryInterface as MenuFactoryInterface;
+use Knp\Menu\ItemInterface as MenuItemInterface;
+
+
 class PageAdmin extends Admin
 {
-    protected $baseRoutePattern = 'page';
+    //protected $baseRoutePattern = 'page';
+    protected $baseRouteName = 'page';
 
     /**
      * @param ListMapper $listMapper
@@ -55,4 +60,8 @@ class PageAdmin extends Admin
             ->add('content')
         ;
     }
+
+    /*protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    {
+    }*/
 }

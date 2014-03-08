@@ -8,7 +8,9 @@
     </head>
     <body>
 
-    {#{{ knp_menu_render('main') }}#}
+        <nav>
+            {{ knp_menu_render('main') }}
+        </nav>
 
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}

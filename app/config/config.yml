@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: @WagaiaCMSBundle/Resources/config/admin.yml }
+    - { resource: @WagaiaCMSBundle/Resources/config/services.yml }
 
 framework:
     #esi:             ~

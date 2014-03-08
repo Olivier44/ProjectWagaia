@@ -3,5 +3,5 @@ wagaia_cms_home:
     defaults: { _controller: WagaiaCMSBundle:Default:index }
 
 wagaia_cms_page:
-    pattern:  /{slug}
+    pattern:  /{slug}.html
     defaults: { _controller: WagaiaCMSBundle:Default:page }
