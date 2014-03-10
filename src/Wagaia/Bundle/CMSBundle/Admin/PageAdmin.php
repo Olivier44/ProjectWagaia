@@ -25,7 +25,10 @@ class PageAdmin extends Admin
         $listMapper
             ->add('id')
             ->add('title', null, array('label' => 'Titre'))
-            ->add('isPublish', null, array('label' => 'Publication'))
+            ->add('isPublish', null, array(
+                    'label' => 'Publication',
+                    'template' => 'WagaiaCMSBundle:Admin/Custom:ajax_is_publish.html.twig'
+            ))
             ->add('slug')
             ->add('_action', 'actions', array(
                 'actions' => array(
