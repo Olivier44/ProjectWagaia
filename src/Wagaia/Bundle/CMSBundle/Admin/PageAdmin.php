@@ -8,8 +8,13 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
+use Knp\Menu\FactoryInterface as MenuFactoryInterface;
+use Knp\Menu\ItemInterface as MenuItemInterface;
+
+
 class PageAdmin extends Admin
 {
+    //protected $baseRoutePattern = 'page';
     protected $baseRouteName = 'page';
 
     /**
@@ -19,7 +24,10 @@ class PageAdmin extends Admin
     {
         $listMapper
             ->add('title', null, array('label' => 'Titre'))
-            ->add('isPublish', null, array('label' => 'Publication'))
+            ->add('isPublish', null, array(
+                    'label' => 'Publication',
+                    'template' => 'WagaiaCMSBundle:Admin/Custom:ajax_is_publish.html.twig'
+            ))
             ->add('slug')
             ->add('_action', 'actions', array(
                 'actions' => array(
@@ -54,4 +62,8 @@ class PageAdmin extends Admin
             ->add('content')
         ;
     }
+
+    /*protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    {
+    }*/
 }

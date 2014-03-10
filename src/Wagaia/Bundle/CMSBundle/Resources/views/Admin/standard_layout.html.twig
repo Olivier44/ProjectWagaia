@@ -225,7 +225,6 @@
             try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
         </script>
 
-
         <ul class="nav nav-list">
         <li>
             <a href="index.html">
@@ -243,10 +242,10 @@
 
             <ul class="submenu">
                 <li>
-                    <a href="#"><i class="icon-double-angle-right"></i>Liste des pages</a>
+                    <a href="{{ path('page_list') }}"><i class="icon-double-angle-right"></i>Liste des pages</a>
                 </li>
                 <li>
-                    <a href="#"><i class="icon-double-angle-right"></i>Ajouter une page</a>
+                    <a href="{{ path('page_create') }}"><i class="icon-double-angle-right"></i>Ajouter une page</a>
                 </li>
             </ul>
         </li>

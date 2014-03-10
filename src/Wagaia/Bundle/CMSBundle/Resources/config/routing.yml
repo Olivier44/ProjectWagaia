@@ -1,3 +1,7 @@
-wagaia_cms_homepage:
-    pattern:  /hello/{name}
+wagaia_cms_home:
+    pattern:  /
     defaults: { _controller: WagaiaCMSBundle:Default:index }
+
+wagaia_cms_page:
+    pattern:  /{slug}.html
+    defaults: { _controller: WagaiaCMSBundle:Default:page }
