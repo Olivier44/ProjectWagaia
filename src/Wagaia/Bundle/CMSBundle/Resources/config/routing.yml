@@ -5,3 +5,7 @@ wagaia_cms_home:
 wagaia_cms_page:
     pattern:  /{slug}
     defaults: { _controller: WagaiaCMSBundle:Default:page }
+
+wagaia_cms_ajax_publication:
+     pattern:  /admin/ajax
+     defaults: { _controller: WagaiaCMSBundle:Default:ajax }

@@ -26,8 +26,8 @@ class PageAdmin extends Admin
             ->add('title', null, array('label' => 'Titre'))
             ->add('slug')
             ->add('isPublish', 'boolean', array(
-                    'label' => 'Publication',
-                    'template' => 'WagaiaCMSBundle:Admin/Custom:ajax_is_publish.html.twig'
+                    'label' => 'Publication'
+                    //'template' => 'WagaiaCMSBundle:Admin/Custom:ajax_is_publish.html.twig'
             ))
             ->add('_action', 'actions', array(
                 'actions' => array(

@@ -3,7 +3,7 @@
 namespace Wagaia\Bundle\CMSBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Wagaia\Bundle\CMSBundle\Entity\Page;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -36,5 +36,11 @@ class DefaultController extends Controller
         }
 
         return $this->render('WagaiaCMSBundle:Default:index.html.twig', array('page' => $page));
+    }
+
+    public function ajaxAction(Request $request)
+    {
+
+        return $this->render('WagaiaCMSBundle:Admin/Custom:ajax_publish_2.html.twig');
     }
 }
