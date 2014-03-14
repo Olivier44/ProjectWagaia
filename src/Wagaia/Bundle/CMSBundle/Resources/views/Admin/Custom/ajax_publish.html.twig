@@ -1,0 +1,7 @@
+<span id="publish-{{ objectID }}">
+    {% if(state == 1) %}
+        <a href="#" data-id="{{ objectID }}" class="publishAction green"><i class="icon-ok-sign bigger-150"></i></a>
+    {% else %}
+        <a href="#" data-id="{{ objectID }}" class="publishAction red"><i class="icon-minus-sign bigger-150"></i></a>
+    {% endif %}
+</span>

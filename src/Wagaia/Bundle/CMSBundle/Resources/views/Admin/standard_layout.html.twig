@@ -416,8 +416,12 @@
 
             // AJAX publication / Dépublication Page
             $('.publishAction').click(function(){
-                $.post('{{ url('wagaia_cms_ajax_publication') }}', function(data) {
-                    $('.publishAction').append(data);
+
+                var objectID = $(this).data('id');
+
+                $.post('{{ url('wagaia_cms_ajax_publication') }}', { "objectID": objectID  }, function(data) {
+                    $('#publish-'+objectID).append(data);
+                    return false;
                 });
             });
 

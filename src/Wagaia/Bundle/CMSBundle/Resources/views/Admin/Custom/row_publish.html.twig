@@ -2,11 +2,13 @@
 
 {% block field%}
 
-        {% if(value == 1) %}
-            <a href="#" class="publishAction green"><i class="icon-ok-sign bigger-150"></i></a>
-        {% else %}
-            <a href="#" class="publishAction red"><i class="icon-minus-sign bigger-150"></i></a>
-        {% endif %}
+        <span id="publish-{{ admin.id(object) }}">
+            {% if(value == 1) %}
+                <a href="#" data-id="{{ admin.id(object) }}" class="publishAction green"><i class="icon-ok-sign bigger-150"></i></a>
+            {% else %}
+                <a href="#" data-id="{{ admin.id(object) }}" class="publishAction red"><i class="icon-minus-sign bigger-150"></i></a>
+            {% endif %}
+        </span>
 
 {% endblock %}
 

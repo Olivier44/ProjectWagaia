@@ -40,7 +40,23 @@ class DefaultController extends Controller
 
     public function ajaxAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $objectID = $request->request->get('objectID');
 
-        return $this->render('WagaiaCMSBundle:Admin/Custom:ajax_publish_2.html.twig');
+        $page = $this->getDoctrine()
+            ->getRepository('WagaiaCMSBundle:Page')
+            ->find($objectID);
+
+        if($page->getIsPublish() == 0) $page->setIsPublish(1);
+            else $page->setIsPublish(0);
+
+        $em->persist($page);
+        $em->flush();
+
+        return $this->render('WagaiaCMSBundle:Admin/Custom:ajax_publish.html.twig',
+            array(
+                'objectID' => $objectID,
+                'state' => $page->getIsPublish()
+            ));
     }
 }
