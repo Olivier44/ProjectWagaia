@@ -47,7 +47,13 @@ class PageAdmin extends Admin
         $formMapper
             ->add('title')
             ->add('content', null, array('required' => false, 'attr' => array('class' => 'ckeditor')))
-            ->add('isPublish', 'checkbox')
+            ->add('isPublish', 'choice', array(
+                    'label' => 'Publication',
+                    'choices' => array(
+                        '0' => 'Non',
+                        '1' => 'Oui',
+                    )
+                ))
         ;
     }
 

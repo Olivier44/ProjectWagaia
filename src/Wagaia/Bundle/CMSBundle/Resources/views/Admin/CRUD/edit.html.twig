@@ -9,18 +9,20 @@
 {% endblock%}
 
 {% block actions %}
-    <div class="sonata-actions btn-group">
-        {% include 'SonataAdminBundle:Button:show_button.html.twig' %}
-        {% include 'SonataAdminBundle:Button:history_button.html.twig' %}
-        {% include 'SonataAdminBundle:Button:acl_button.html.twig' %}
-        {% include 'SonataAdminBundle:Button:create_button.html.twig' %}
-        {% include 'SonataAdminBundle:Button:list_button.html.twig' %}
+    <div class="clearfix form-actions">
+        <div class="col-md-offset-3 col-md-9">
+            {% include 'SonataAdminBundle:Button:show_button.html.twig' %}
+            {% include 'SonataAdminBundle:Button:history_button.html.twig' %}
+            {% include 'SonataAdminBundle:Button:acl_button.html.twig' %}
+            {% include 'SonataAdminBundle:Button:create_button.html.twig' %}
+            {% include 'SonataAdminBundle:Button:list_button.html.twig' %}
+        </div>
     </div>
 {% endblock %}
 
 {% block side_menu %}{{ knp_menu_render(admin.sidemenu(action), {'currentClass' : 'active'}, 'list') }}{% endblock %}
 
-{% use 'SonataAdminBundle:CRUD:base_edit_form.html.twig' with form as parentForm %}
+{% use 'WagaiaCMSBundle:Admin/CRUD:base_edit_form.html.twig' with form as parentForm %}
 
 {% block form %}
     {{ block('parentForm') }}
